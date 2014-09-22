@@ -9,9 +9,11 @@ import java.util.Set;
 import com.google.gson.Gson;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -139,11 +141,28 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 
 				@Override
 				public boolean onItemLongClick(AdapterView<?> parent,
-						View view, int position, long id) {
-					// TODO Auto-generated method stub
-					removeItemDialog(findViewById(MODE_PRIVATE));
-					return false;
-				}
+					View view, int position, long id) {
+					//removeItemDialog(findViewById(MODE_PRIVATE));
+					//return false;
+					// Remove Item
+		            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+		            dialog.setTitle(R.string.dialog_remove_item);
+		            dialog.setMessage("Are you sure you wish to delete this item?");
+		            final toDo itemToRemove = adapter.getItem(position);
+
+		            dialog.setNegativeButton("Cancel", null);
+		            dialog.setPositiveButton("Delete", new AlertDialog.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int which) {        
+		                items.remove(itemToRemove);
+		                adapter.notifyDataSetChanged(); 
+		             }
+		            });
+		             dialog.show();
+		             // Return true to consume the click event. In this case the
+		             // onListItemClick listener is not called anymore.  
+		             return true;
+		        }
+				
 
 			});
     }

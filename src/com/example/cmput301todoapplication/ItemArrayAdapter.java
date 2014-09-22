@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,7 +46,7 @@ public class ItemArrayAdapter extends ArrayAdapter<toDo>{
     	   holder.code = (TextView) convertView.findViewById(R.id.code);
     	   holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
     	   convertView.setTag(holder);
-    	 
+
     	    holder.name.setOnClickListener( new View.OnClickListener() {  
     	     public void onClick(View v) {  
     	      CheckBox cb = (CheckBox) v ;  
