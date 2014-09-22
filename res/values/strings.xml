@@ -10,6 +10,10 @@
     <string name="object_id_key">dfoiuoerterjkh</string>
     <string name="dialog_remove_item">Delete this item?</string>
     <string name="item_removed">Delete</string>
+    <string-array name="filter_choices">
+        <item>Archived</item>
+        <item>All</item>
+    </string-array>
     
 
 </resources>

@@ -91,6 +91,14 @@ public class MainActivity extends Activity implements DialogFragmentListener{
     	return true;
     }
     
+    public boolean deleteObject(toDo item) {
+    	SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+    	Editor prefsEditor = preferences.edit();
+    	prefsEditor.remove(Integer.toString(item.getId()));
+    	prefsEditor.commit();
+		return false;
+    }
+    
     public void updateList()
     {
     	final ListView listView = (ListView) findViewById(R.id.itemListView);
@@ -154,6 +162,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 		            dialog.setPositiveButton("Delete", new AlertDialog.OnClickListener() {
 		            public void onClick(DialogInterface dialog, int which) {        
 		                items.remove(itemToRemove);
+		                deleteObject(itemToRemove);
 		                adapter.notifyDataSetChanged(); 
 		             }
 		            });

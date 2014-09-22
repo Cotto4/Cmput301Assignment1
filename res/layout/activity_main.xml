@@ -9,11 +9,16 @@
     <ListView
         android:id="@+id/itemListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:clickable="true"
         android:longClickable="true" >
-
     </ListView>
+
+    <Spinner
+        android:id="@+id/filterspinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@+array/filter_choices" />
 
 </FrameLayout>
 

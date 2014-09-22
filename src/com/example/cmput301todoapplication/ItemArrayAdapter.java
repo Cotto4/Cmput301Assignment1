@@ -1,10 +1,10 @@
 package com.example.cmput301todoapplication;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import android.annotation.SuppressLint;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,15 +12,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
-public class ItemArrayAdapter extends ArrayAdapter<toDo>{
+public class ItemArrayAdapter extends ArrayAdapter<toDo> implements Filterable{
 
     HashMap<toDo, Integer> mIdMap = new HashMap<toDo, Integer>();
     private MainActivity databaseAccess;
+    public List<toDo> items;
+    private ToDoFilter filter;
+    
     public ItemArrayAdapter(Context context, int textViewResourceId,
         List<toDo> objects) {
       super(context, textViewResourceId, objects);
+      items = objects;
+      filter = new ToDoFilter();
       for (int i = 0; i < objects.size(); ++i) {
         mIdMap.put(objects.get(i), i);
       }
@@ -78,6 +85,53 @@ public class ItemArrayAdapter extends ArrayAdapter<toDo>{
     @Override
     public boolean hasStableIds() {
       return true;
+    }
+    private class ToDoFilter extends Filter {
+    	
+    	@Override
+    	protected FilterResults performFiltering(CharSequence constraint) {
+    	    FilterResults results = new FilterResults();
+    	    // We implement here the filter logic
+    	    if (constraint == null || constraint.length() == 0) {
+    	        // No filter implemented we return all the list
+    	        results.values = items;
+    	        results.count = items.size();
+    	    }
+    	    else {
+    	        // We perform filtering operation
+    	        List<toDo> nToDo = new ArrayList<toDo>();
+    	         
+    	        for (toDo t : items) {
+    	            if (t.getArchived())
+    	                nToDo.add(t);
+    	        }
+    	         
+    	        results.values = nToDo;
+    	        results.count = nToDo.size();
+    	 
+    	    }
+    	    return results;
+    	}
+
+    	@Override
+    	protected void publishResults(CharSequence constraint, FilterResults results) {
+    	    if (results.count == 0)
+    	        notifyDataSetInvalidated();
+    	    else {
+    	        items = (List<toDo>) results.values;
+    	        notifyDataSetChanged();
+    	    }
+    		
+    	}
+
+    	
+    }
+    
+    public Filter getFilter() {
+    	if (filter == null) {
+    		filter = new ToDoFilter();
+    	}
+    	return filter;
     }
 
 
