@@ -79,7 +79,8 @@ public class MainActivity extends Activity implements DialogFragmentListener{
             finish();
         }
         if (id == R.id.email_button) {
-        	Intent i = new Intent(Intent.ACTION_SEND);
+        	emailDialog(this.findViewById(MODE_PRIVATE));
+        	/*Intent i = new Intent(Intent.ACTION_SEND);
         	i.setType("message/rfc822");
         	i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"recipient@example.com"});
         	i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
@@ -88,7 +89,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
         	    startActivity(Intent.createChooser(i, "Send mail..."));
         	} catch (android.content.ActivityNotFoundException ex) {
         	    Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        	}
+        	}*/
         }
         return super.onOptionsItemSelected(item);
     }
@@ -100,6 +101,11 @@ public class MainActivity extends Activity implements DialogFragmentListener{
     
     public void removeItemDialog(View view) {
     	DialogFragment dialog = new RemoveItemDialog();
+    	dialog.show(getFragmentManager(), INPUT_SERVICE);
+    }
+    
+    public void emailDialog(View view) {
+    	DialogFragment dialog = new EmailItemDialog();
     	dialog.show(getFragmentManager(), INPUT_SERVICE);
     }
     
@@ -145,7 +151,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 	            	items.add(item);
 	            }
         	}
-    }
+        }
         adapter = new ItemArrayAdapter(this,
                 R.layout.todo_information, items);
             listView.setAdapter(adapter);

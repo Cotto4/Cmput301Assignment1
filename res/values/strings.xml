@@ -16,6 +16,8 @@
     </string-array>
     <string name="see_archived">See Archived</string>
     <string name="see_all_items">See Items</string>
+    <string name="dialog_email_items">Select items to Email</string>
+    <string name="dialog_email">Email</string>
     
 
 </resources>
