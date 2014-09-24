@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 public class toDo {
 	
 	private int Id;
-	private boolean Archived;
+	public boolean Archived;
 	private String Text;
 	private boolean Checked;
 	private Date DateCreated;

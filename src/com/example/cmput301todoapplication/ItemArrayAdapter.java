@@ -1,6 +1,7 @@
 package com.example.cmput301todoapplication;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,19 +20,21 @@ import android.widget.TextView;
 public class ItemArrayAdapter extends ArrayAdapter<toDo> implements Filterable{
 
     HashMap<toDo, Integer> mIdMap = new HashMap<toDo, Integer>();
-    private MainActivity databaseAccess;
+    private AccessData databaseAccess;
     public List<toDo> items;
+    private List<toDo> AllItems;
     private ToDoFilter filter;
     
     public ItemArrayAdapter(Context context, int textViewResourceId,
         List<toDo> objects) {
       super(context, textViewResourceId, objects);
       items = objects;
+      AllItems = objects;
       filter = new ToDoFilter();
       for (int i = 0; i < objects.size(); ++i) {
         mIdMap.put(objects.get(i), i);
       }
-      databaseAccess = (MainActivity) context;
+      databaseAccess = new AccessData();
     }
     private class ViewHolder {
     	   TextView code;
@@ -59,7 +62,7 @@ public class ItemArrayAdapter extends ArrayAdapter<toDo> implements Filterable{
     	      CheckBox cb = (CheckBox) v ;  
     	      toDo item = (toDo) cb.getTag();
     	      item.setSelected(!item.getChecked());
-    	      databaseAccess.saveObject(item);
+    	      databaseAccess.saveObject(App.getContext(), item);
     	     }  
     	    });  
     	   } 
@@ -89,16 +92,22 @@ public class ItemArrayAdapter extends ArrayAdapter<toDo> implements Filterable{
     private class ToDoFilter extends Filter {
     	
     	@Override
+    	//changed implementation for specific switch cases only
     	protected FilterResults performFiltering(CharSequence constraint) {
     	    FilterResults results = new FilterResults();
     	    // We implement here the filter logic
-    	    if (constraint == null || constraint.length() == 0) {
-    	        // No filter implemented we return all the list
+    	    if (constraint == null || constraint.length() == 0 || constraint.equals("All")) {
+    	        // No filter or All filter, show all items (and ensure that AllItems == items)
+    	    	if (items.size() == 0) {
+    	    		for (int i = 0; i < AllItems.size(); i++) {
+    	    			items.add(AllItems.get(i));
+    	    		}
+    	    	}
     	        results.values = items;
     	        results.count = items.size();
     	    }
-    	    else {
-    	        // We perform filtering operation
+    	    else if (constraint.equals("Archived")) {
+    	        // Show archived items
     	        List<toDo> nToDo = new ArrayList<toDo>();
     	         
     	        for (toDo t : items) {
@@ -110,6 +119,7 @@ public class ItemArrayAdapter extends ArrayAdapter<toDo> implements Filterable{
     	        results.count = nToDo.size();
     	 
     	    }
+ 
     	    return results;
     	}
 
@@ -118,13 +128,14 @@ public class ItemArrayAdapter extends ArrayAdapter<toDo> implements Filterable{
     	    if (results.count == 0)
     	        notifyDataSetInvalidated();
     	    else {
-    	        items = (List<toDo>) results.values;
+    	    		items.addAll((List<toDo>) results.values);
+    	        //items = (List<toDo>) results.values;
     	        notifyDataSetChanged();
     	    }
-    		
-    	}
+
 
     	
+    }
     }
     
     public Filter getFilter() {

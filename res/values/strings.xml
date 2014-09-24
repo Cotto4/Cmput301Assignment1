@@ -11,9 +11,11 @@
     <string name="dialog_remove_item">Delete this item?</string>
     <string name="item_removed">Delete</string>
     <string-array name="filter_choices">
-        <item>Archived</item>
         <item>All</item>
+        <item>Archived</item>
     </string-array>
+    <string name="see_archived">See Archived</string>
+    <string name="see_all_items">See Items</string>
     
 
 </resources>

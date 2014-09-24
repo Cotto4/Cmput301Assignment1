@@ -11,122 +11,93 @@ import com.google.gson.Gson;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
 
-
-
-public class MainActivity extends Activity implements DialogFragmentListener{
+public class ArchivedActivity extends Activity implements DialogFragmentListener{
 
 	private int[] objectIds;
 	private ItemArrayAdapter adapter;
 	public AccessData databaseAccess;
-	
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    setContentView(R.layout.activity_archived);
         App.setContext(this);
         databaseAccess = new AccessData();
-        
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
-        
         updateList();
-    }
+	}
+	
+	 @Override
+	    public boolean onCreateOptionsMenu(Menu menu) {
+	        // Inflate the menu; this adds items to the action bar if it is present.
+	        getMenuInflater().inflate(R.menu.main, menu);
+	        return true;
+	    }
 
+	    @Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	        // Handle action bar item clicks here. The action bar will
+	        // automatically handle clicks on the Home/Up button, so long
+	        // as you specify a parent activity in AndroidManifest.xml.
+	        int id = item.getItemId();
+	        if (id == R.id.seeAll) {
+	        	Intent intent = new Intent(ArchivedActivity.this, MainActivity.class);
+	            startActivity(intent);      
+	            finish();
+	        }
+	        if (id == R.id.add_item_button) {
+	        	addItemDialog(this.findViewById(MODE_PRIVATE));
+	        }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        if (id == R.id.add_item_button) {
-        	addItemDialog(this.findViewById(MODE_PRIVATE));
-        }
-        if (id == R.id.archived) {
-            Intent intent = new Intent(MainActivity.this, ArchivedActivity.class);
-            startActivity(intent);      
-            finish();
-        }
-        if (id == R.id.email_button) {
-        	Intent i = new Intent(Intent.ACTION_SEND);
-        	i.setType("message/rfc822");
-        	i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"recipient@example.com"});
-        	i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
-        	i.putExtra(Intent.EXTRA_TEXT   , "body of email");
-        	try {
-        	    startActivity(Intent.createChooser(i, "Send mail..."));
-        	} catch (android.content.ActivityNotFoundException ex) {
-        	    Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        	}
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    
-    public void addItemDialog(View view) {
-    	DialogFragment dialog = new AddItemDialog();
-    	dialog.show(getFragmentManager(), INPUT_SERVICE);
-    }
-    
-    public void removeItemDialog(View view) {
-    	DialogFragment dialog = new RemoveItemDialog();
-    	dialog.show(getFragmentManager(), INPUT_SERVICE);
-    }
-    
-    public boolean saveObject(toDo item) {
-    	
-    	SharedPreferences preferences = getSharedPreferences("Items",MODE_PRIVATE);
-    	Editor prefsEditor = preferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(item);
-        prefsEditor.putString(Integer.toString(item.getId()), json);
-        prefsEditor.commit();
-    	return true;
-    }
-    
-    public boolean deleteObject(toDo item) {
-    	SharedPreferences preferences = getSharedPreferences("Items",MODE_PRIVATE);
-    	Editor prefsEditor = preferences.edit();
-    	prefsEditor.remove(Integer.toString(item.getId()));
-    	prefsEditor.commit();
-		return false;
-    }
-    
+	        return super.onOptionsItemSelected(item);
+	    }
+	    
+	    public void addItemDialog(View view) {
+	    	DialogFragment dialog = new AddItemDialog();
+	    	dialog.show(getFragmentManager(), INPUT_SERVICE);
+	    }
+	    
+	    public void removeItemDialog(View view) {
+	    	DialogFragment dialog = new RemoveItemDialog();
+	    	dialog.show(getFragmentManager(), INPUT_SERVICE);
+	    }
+	    
+	    public boolean saveObject(toDo item) {
+	    	
+	    	SharedPreferences preferences = getSharedPreferences("Items",MODE_PRIVATE);
+	    	Editor prefsEditor = preferences.edit();
+	        Gson gson = new Gson();
+	        String json = gson.toJson(item);
+	        prefsEditor.putString(Integer.toString(item.getId()), json);
+	        prefsEditor.commit();
+	    	return true;
+	    }
+	    
+	    public boolean deleteObject(toDo item) {
+	    	SharedPreferences preferences = getSharedPreferences("Items",MODE_PRIVATE);
+	    	Editor prefsEditor = preferences.edit();
+	    	prefsEditor.remove(Integer.toString(item.getId()));
+	    	prefsEditor.commit();
+			return false;
+	    }
+	
     public void updateList()
     {
     	final ListView listView = (ListView) findViewById(R.id.itemListView);
         final ArrayList<toDo> items = new ArrayList<toDo>();
-        SharedPreferences savedItems = getSharedPreferences("Items",Context.MODE_PRIVATE);
+        SharedPreferences savedItems = getSharedPreferences("Items", Context.MODE_PRIVATE);
         
         Gson gson = new Gson();
         Map<String,?> entries = savedItems.getAll();
@@ -141,11 +112,11 @@ public class MainActivity extends Activity implements DialogFragmentListener{
         	else {
 	            String json = savedItems.getString(key, "");
 	            toDo item = gson.fromJson(json, toDo.class);
-	            if (item != null && item.getArchived() == false) {
+	            if (item != null && item.getArchived() == true) {
 	            	items.add(item);
 	            }
         	}
-    }
+        }
         adapter = new ItemArrayAdapter(this,
                 R.layout.todo_information, items);
             listView.setAdapter(adapter);
@@ -156,7 +127,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 				public boolean onItemLongClick(AdapterView<?> parent,
 					View view, int position, long id) {
 					// Remove or archive item
-		            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+		            AlertDialog.Builder dialog = new AlertDialog.Builder(ArchivedActivity.this);
 		            dialog.setTitle(R.string.dialog_remove_item);
 		            dialog.setMessage("Delete or archive this item?");
 		            final toDo itemToRemove = adapter.getItem(position);
@@ -203,22 +174,6 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 			});
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-    }
-
 	@Override
 	public void onReturnValue(String text) {
 		SharedPreferences preferences = getSharedPreferences("Items",Context.MODE_PRIVATE);
@@ -248,5 +203,3 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 		
 	}
 }
-
-
