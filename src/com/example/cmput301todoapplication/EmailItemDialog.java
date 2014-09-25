@@ -6,9 +6,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class EmailItemDialog extends DialogFragment{
 
@@ -48,6 +50,18 @@ public class EmailItemDialog extends DialogFragment{
                 	   for(Integer i : selectedItemsIndex) {
                 		   selectedItems.add(allItems.get(i));
                 	   }
+                   	Intent i = new Intent(Intent.ACTION_SEND);
+                	i.setType("message/rfc822");
+                	String emailText = "";
+                	for (toDo item : selectedItems){
+                		emailText = emailText + "\n" + item.getText();
+                	}
+                	i.putExtra(Intent.EXTRA_TEXT   , emailText);
+                	try {
+                	    startActivity(Intent.createChooser(i, "Send mail..."));
+                	} catch (android.content.ActivityNotFoundException ex) {
+                	    Toast.makeText(getActivity().getApplicationContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                	}
                    }
                })
                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
