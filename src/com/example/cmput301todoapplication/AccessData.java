@@ -13,7 +13,27 @@ import com.google.gson.Gson;
 
 public class AccessData{
 
-	
+	public ArrayList<toDo> getAllItems(Context context) {
+		final ArrayList<toDo> items = new ArrayList<toDo>();
+		SharedPreferences savedItems = context.getSharedPreferences("Items",Context.MODE_PRIVATE);
+        
+        Gson gson = new Gson();
+        Map<String,?> entries = savedItems.getAll();
+        Set<String> keys = entries.keySet();
+        
+        for (String key : keys) {
+        	if (key.equals(R.string.object_id_key)) {
+        	}
+        	else {
+	            String json = savedItems.getString(key, "");
+	            toDo item = gson.fromJson(json, toDo.class);
+	            if (item != null) {
+	            	items.add(item);
+	            }
+        	}
+        }
+		return items;
+	}
 	public CharSequence[] allItemsText(Context context) {
         final ArrayList<String> items = new ArrayList<String>();
         SharedPreferences savedItems = context.getSharedPreferences("Items",Context.MODE_PRIVATE);
