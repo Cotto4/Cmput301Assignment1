@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 // Main activity of the app, used to display a list
 // of the current items
@@ -117,7 +118,6 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 				View view, int position, long id) {
 				// Remove or archive item
 	            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-	            dialog.setTitle(R.string.dialog_remove_item);
 	            dialog.setMessage("Delete or archive this item?");
 	            final toDo itemToRemove = adapter.getItem(position);
 	
@@ -132,6 +132,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 						itemToRemove.setArchived(!itemToRemove.getArchived());
 						databaseAccess.modifyObject(App.getContext(), itemToRemove);
 						updateList();
+						Toast.makeText(App.getContext(), "Archived " + itemToRemove.getText(), Toast.LENGTH_LONG).show();
 					}
 	            
 	            });
@@ -145,6 +146,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 							itemToRemove.setArchived(!itemToRemove.getArchived());
 							databaseAccess.modifyObject(App.getContext(), itemToRemove);
 							updateList();
+							Toast.makeText(App.getContext(), "Unarchived " + itemToRemove.getText(), Toast.LENGTH_LONG).show();
 						}
 		            
 		            });
@@ -154,6 +156,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 	                items.remove(itemToRemove);
 	                databaseAccess.deleteObject(App.getContext(),itemToRemove);
 	                adapter.notifyDataSetChanged(); 
+	                Toast.makeText(App.getContext(), "Deleted " + itemToRemove.getText(), Toast.LENGTH_LONG).show();
 	             }
             });
             
@@ -174,6 +177,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 			updateList();
 			final ListView listView = (ListView) findViewById(R.id.itemListView);
 			((BaseAdapter) listView.getAdapter()).notifyDataSetChanged(); 
+			Toast.makeText(App.getContext(), "Created " + item.getText(), Toast.LENGTH_LONG).show();
 		}	
 	}
 }

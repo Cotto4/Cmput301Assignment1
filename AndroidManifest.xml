@@ -23,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="ArchivedActivity"></activity>
+        <activity android:name="ArchivedActivity"
+            android:label="@string/archived"></activity>
     </application>
 
 </manifest>

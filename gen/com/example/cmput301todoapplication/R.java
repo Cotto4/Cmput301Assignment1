@@ -61,6 +61,7 @@ public final class R {
         public static final int action_add=0x7f050003;
         public static final int action_settings=0x7f050001;
         public static final int app_name=0x7f050000;
+        public static final int archived=0x7f050011;
         public static final int cancel=0x7f050005;
         public static final int dialog_add_item=0x7f050004;
         public static final int dialog_email=0x7f05000d;

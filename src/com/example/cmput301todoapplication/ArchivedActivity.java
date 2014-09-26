@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ArchivedActivity extends Activity implements DialogFragmentListener{
 
@@ -116,8 +117,7 @@ public class ArchivedActivity extends Activity implements DialogFragmentListener
 			View view, int position, long id) {
 			// Remove or archive item
             AlertDialog.Builder dialog = new AlertDialog.Builder(ArchivedActivity.this);
-            dialog.setTitle(R.string.dialog_remove_item);
-            dialog.setMessage("Delete or archive this item?");
+            dialog.setMessage("Delete or unarchive this item?");
             final toDo itemToRemove = adapter.getItem(position);
 
             dialog.setNegativeButton("Cancel", null);
@@ -129,6 +129,7 @@ public class ArchivedActivity extends Activity implements DialogFragmentListener
 					itemToRemove.setArchived(!itemToRemove.getArchived());
 					databaseAccess.modifyObject(App.getContext(), itemToRemove);
 					updateList();
+					Toast.makeText(App.getContext(), "Archived " + itemToRemove.getText(), Toast.LENGTH_LONG).show();
 				}
             
             });
@@ -141,6 +142,7 @@ public class ArchivedActivity extends Activity implements DialogFragmentListener
 						itemToRemove.setArchived(!itemToRemove.getArchived());
 						databaseAccess.modifyObject(App.getContext(), itemToRemove);
 						updateList();
+						Toast.makeText(App.getContext(), "Unarchived " + itemToRemove.getText(), Toast.LENGTH_LONG).show();
 					}
 	            
 	            });
@@ -150,6 +152,7 @@ public class ArchivedActivity extends Activity implements DialogFragmentListener
                 items.remove(itemToRemove);
                 databaseAccess.deleteObject(App.getContext(), itemToRemove);
                 adapter.notifyDataSetChanged(); 
+                Toast.makeText(App.getContext(), "Deleted " + itemToRemove.getText(), Toast.LENGTH_LONG).show();
              }
             });
              dialog.show();  
@@ -170,6 +173,7 @@ public class ArchivedActivity extends Activity implements DialogFragmentListener
 			updateList();
 			final ListView listView = (ListView) findViewById(R.id.itemListView);
 			((BaseAdapter) listView.getAdapter()).notifyDataSetChanged(); 
+			Toast.makeText(App.getContext(), "Created " + item.getText(), Toast.LENGTH_LONG).show();
 		}	
 	}
 }

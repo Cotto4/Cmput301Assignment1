@@ -8,7 +8,7 @@
     <string name="dialog_add_item">Create a ToDo Item</string><string name="cancel">Cancel</string>
     <string name="item_added">Add Item</string>
     <string name="object_id_key">dfoiuoerterjkh</string>
-    <string name="dialog_remove_item">Delete this item?</string>
+    <string name="dialog_remove_item">Delete or archive this item?</string>
     <string name="item_removed">Delete</string>
     <string-array name="filter_choices">
         <item>All</item>
@@ -21,6 +21,7 @@
     <string name="email_all">Email All</string>
     <string name="summary">Summary</string>
     <string name="ok">OK</string>
+    <string name="archived">Archived Items</string>
     
 
 </resources>
