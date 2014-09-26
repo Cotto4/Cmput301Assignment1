@@ -7,9 +7,7 @@ import java.util.Set;
 
 import com.google.gson.Gson;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,65 +21,48 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class ArchivedActivity extends Activity implements DialogFragmentListener{
+public class ArchivedActivity extends AbstractActivity implements DialogFragmentListener{
 
-	private ItemArrayAdapter adapter;
+	public ItemArrayAdapter adapter;
 	public AccessData databaseAccess;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
-	    setContentView(R.layout.activity_archived);
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         App.setContext(this);
         databaseAccess = new AccessData();
         updateList();
-	}
+    }
 	
-	 @Override
-	    public boolean onCreateOptionsMenu(Menu menu) {
-	        // Inflate the menu; this adds items to the action bar if it is present.
-	        getMenuInflater().inflate(R.menu.main, menu);
-	        return true;
-	    }
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
-	    @Override
-	    public boolean onOptionsItemSelected(MenuItem item) {
-	        // Handle action bar item clicks
-	        int id = item.getItemId();
-	        if (id == R.id.summary_button) {
-	        	summaryDialog(this.findViewById(MODE_PRIVATE));
-	        }
-	        if (id == R.id.add_item_button) {
-	        	addItemDialog(this.findViewById(MODE_PRIVATE));
-	        }
-	        if (id == R.id.seeAll) {
-	            Intent intent = new Intent(ArchivedActivity.this, MainActivity.class);
-	            startActivity(intent);      
-	            finish();
-	        }
-	        if (id == R.id.email_button) {
-	        	emailDialog(this.findViewById(MODE_PRIVATE));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks
+        int id = item.getItemId();
+        if (id == R.id.summary_button) {
+        	summaryDialog(this.findViewById(MODE_PRIVATE));
+        }
+        if (id == R.id.add_item_button) {
+        	addItemDialog(this.findViewById(MODE_PRIVATE));
+        }
+        if (id == R.id.seeAll) {
+            Intent intent = new Intent(ArchivedActivity.this, MainActivity.class);
+            startActivity(intent);      
+            finish();
+        }
+        if (id == R.id.email_button) {
+        	emailDialog(this.findViewById(MODE_PRIVATE));
 
-	        }
-
-	        return super.onOptionsItemSelected(item);
-	    }
-	    
-	    public void addItemDialog(View view) {
-	    	DialogFragment dialog = new AddItemDialog();
-	    	dialog.show(getFragmentManager(), INPUT_SERVICE);
-	    }
-	    
-	    public void emailDialog(View view) {
-	    	DialogFragment dialog = new EmailItemDialog();
-	    	dialog.show(getFragmentManager(), INPUT_SERVICE);
-	    }
-	    
-	    public void summaryDialog(View view) {
-	    	DialogFragment dialog = new SummaryDialog();
-	    	dialog.show(getFragmentManager(), INPUT_SERVICE);
-	    }
-	    
+        }
+        return super.onOptionsItemSelected(item);
+    }
 	
     public void updateList()
     {

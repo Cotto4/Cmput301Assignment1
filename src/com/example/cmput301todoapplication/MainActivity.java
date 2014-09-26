@@ -7,9 +7,7 @@ import java.util.Set;
 
 import com.google.gson.Gson;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +24,7 @@ import android.widget.Toast;
 // Main activity of the app, used to display a list
 // of the current items
 
-public class MainActivity extends Activity implements DialogFragmentListener{
+public class MainActivity extends AbstractActivity implements DialogFragmentListener{
 
 	private ItemArrayAdapter adapter;
 	public AccessData databaseAccess;
@@ -69,21 +67,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
         }
         return super.onOptionsItemSelected(item);
     }
-    
-    private void addItemDialog(View view) {
-    	DialogFragment dialog = new AddItemDialog();
-    	dialog.show(getFragmentManager(), INPUT_SERVICE);
-    }
 
-    private void emailDialog(View view) {
-    	DialogFragment dialog = new EmailItemDialog();
-    	dialog.show(getFragmentManager(), INPUT_SERVICE);
-    }
-    
-    private void summaryDialog(View view) {
-    	DialogFragment dialog = new SummaryDialog();
-    	dialog.show(getFragmentManager(), INPUT_SERVICE);
-    }
     
 
     // Code in this section was taken from 

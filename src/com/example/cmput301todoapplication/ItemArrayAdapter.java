@@ -46,22 +46,20 @@ public class ItemArrayAdapter extends ArrayAdapter<toDo>{
     	   Log.v("ConvertView", String.valueOf(position));
     	 
     	   if (convertView == null) {
-    	   LayoutInflater vi = (LayoutInflater)getContext().getSystemService(
-    	     Context.LAYOUT_INFLATER_SERVICE);
-    	   convertView = vi.inflate(R.layout.todo_information, null);
-    	 
-    	   holder = new ViewHolder();
-    	   holder.code = (TextView) convertView.findViewById(R.id.code);
-    	   holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
-    	   convertView.setTag(holder);
-
-    	    holder.name.setOnClickListener( new View.OnClickListener() {  
-    	     public void onClick(View v) {  
-    	      CheckBox cb = (CheckBox) v ;  
-    	      toDo item = (toDo) cb.getTag();
-    	      item.setChecked(!item.getChecked());
-    	      databaseAccess.saveObject(App.getContext(), item);
-    	     }  
+	    	   LayoutInflater vi = (LayoutInflater)getContext().getSystemService(
+	    			   				Context.LAYOUT_INFLATER_SERVICE);
+	    	   convertView = vi.inflate(R.layout.todo_information, null);
+	    	   holder = new ViewHolder();
+	    	   holder.code = (TextView) convertView.findViewById(R.id.code);
+	    	   holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
+	    	   convertView.setTag(holder);
+	    	   holder.name.setOnClickListener( new View.OnClickListener() {  
+	    	   public void onClick(View v) {  
+	    	      CheckBox cb = (CheckBox) v ;  
+	    	      toDo item = (toDo) cb.getTag();
+	    	      item.setChecked(!item.getChecked());
+	    	      databaseAccess.saveObject(App.getContext(), item);
+	    	   }  
     	    });  
     	   } 
     	   else {
