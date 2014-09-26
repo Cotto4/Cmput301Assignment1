@@ -129,7 +129,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 	
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						itemToRemove.Archived = !itemToRemove.getArchived();
+						itemToRemove.setArchived(!itemToRemove.getArchived());
 						databaseAccess.modifyObject(App.getContext(), itemToRemove);
 						updateList();
 					}
@@ -142,7 +142,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 	
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							itemToRemove.Archived = !itemToRemove.getArchived();
+							itemToRemove.setArchived(!itemToRemove.getArchived());
 							databaseAccess.modifyObject(App.getContext(), itemToRemove);
 							updateList();
 						}

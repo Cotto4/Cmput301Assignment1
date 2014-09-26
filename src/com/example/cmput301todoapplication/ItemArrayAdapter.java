@@ -22,7 +22,7 @@ import android.widget.TextView;
 public class ItemArrayAdapter extends ArrayAdapter<toDo>{
 
     HashMap<toDo, Integer> mIdMap = new HashMap<toDo, Integer>();
-    private AccessData databaseAccess;
+    public AccessData databaseAccess;
     public List<toDo> items;
     
     public ItemArrayAdapter(Context context, int textViewResourceId,

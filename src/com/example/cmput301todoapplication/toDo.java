@@ -4,7 +4,7 @@ package com.example.cmput301todoapplication;
 public class toDo {
 	
 	private int Id;
-	public boolean Archived;
+	private boolean Archived;
 	private String Text;
 	private boolean Checked;
 	

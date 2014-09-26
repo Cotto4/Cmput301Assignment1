@@ -118,7 +118,7 @@ public class AccessData{
     	ArrayList<toDo> unArchItems = new ArrayList<toDo>();
     	ArrayList<toDo> items = getAllItems(context);
     	for (toDo item : items) {
-    		if (item.Archived == false) {
+    		if (item.getArchived() == false) {
     			unArchItems.add(item);
     		}
     	}
@@ -130,7 +130,7 @@ public class AccessData{
     	ArrayList<toDo> archItems = new ArrayList<toDo>();
     	ArrayList<toDo> items = getAllItems(context);
     	for (toDo item : items) {
-    		if (item.Archived == true) {
+    		if (item.getArchived() == true) {
     			archItems.add(item);
     		}
     	}
