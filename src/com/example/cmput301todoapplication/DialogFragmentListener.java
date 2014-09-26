@@ -7,6 +7,7 @@ package com.example.cmput301todoapplication;
 
 // This code/idea was taken from
 // http://stackoverflow.com/questions/13435118/robust-way-to-pass-value-back-from-dialog-to-activity-on-android
+// by user "antew"
 // and is licensed under the Creative Commons Attribution Share Alike license.
 
 public interface DialogFragmentListener {

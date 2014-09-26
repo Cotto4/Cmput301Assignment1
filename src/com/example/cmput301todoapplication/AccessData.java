@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 
 // Multiple methods in this class use code taken from 
 // http://stackoverflow.com/questions/17401799/how-to-know-how-many-shared-preference-in-shared-preferences-in-android
+// by user "blackbelt"
 // to aid in pulling the preferences and referring to each individual item.
 // This code is licensed under the Creative Commons Attribution Share Alike license.
 

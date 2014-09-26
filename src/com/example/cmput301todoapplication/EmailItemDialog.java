@@ -69,6 +69,7 @@ public class EmailItemDialog extends DialogFragment{
     
     //The code below was partially taken from
     //http://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application
+    // by user "fiXedd"
     //and is licensed under the Creative Commons Attribution Share Alike license.
     public void sendEmail(ArrayList<toDo> selectedItems) {
      	Intent i = new Intent(Intent.ACTION_SEND);

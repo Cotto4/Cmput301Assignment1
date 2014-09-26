@@ -1,5 +1,7 @@
 package com.example.cmput301todoapplication;
 
+// Abstract class for activities to handle the dialog fragments
+
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.view.View;

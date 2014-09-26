@@ -7,6 +7,7 @@ import android.content.Context;
 
 //  Code was taken from 
 // http://stackoverflow.com/questions/12320857/how-to-get-my-activity-context
+// by user "hasanghaforian"
 // and is licensed under the Creative Commons Attribution Share Alike license.
 
 public class App extends Application {
