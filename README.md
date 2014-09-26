@@ -3,6 +3,9 @@ Cmput301Assignment1
 
 Long click an item for options to delete and archive it.
 
+Two UML documents were included. One was auto generated using eUML2 and shows more detail in the connections
+between the classes, while the Visio created one shows the in depth methods and attributes of each class. 
+
 Various pieces of code in this project were referenced, or taken in their entirety, from the following sources:
 
 http://www.mysamplecode.com/2012/07/android-listview-checkbox-example.html
