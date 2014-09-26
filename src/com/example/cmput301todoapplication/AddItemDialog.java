@@ -8,10 +8,11 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
 
+
+//Dialog to add a toDo item to the application
 public class AddItemDialog extends DialogFragment {
 	
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         EditText input = new EditText(App.getContext());
         input.setId(0);
@@ -32,7 +33,7 @@ public class AddItemDialog extends DialogFragment {
                        // User cancelled the dialog
                    }
                });
-        // Create the AlertDialog object and return it
+
         return builder.create();
     }
 }

@@ -99,59 +99,65 @@ public class ArchivedActivity extends Activity implements DialogFragmentListener
             	items.add(item);
             }
         }
-        adapter = new ItemArrayAdapter(this,
-                		R.layout.todo_information, items);
-            			listView.setAdapter(adapter);
+        
+        setAdapter(listView, items);
 
-            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+    }
+    
+    public void setAdapter(ListView listview, final ArrayList<toDo> items) {
+        adapter = new ItemArrayAdapter(this,
+        		R.layout.todo_information, items);
+    			listview.setAdapter(adapter);
+
+    listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+		@Override
+		public boolean onItemLongClick(AdapterView<?> parent,
+			View view, int position, long id) {
+			// Remove or archive item
+            AlertDialog.Builder dialog = new AlertDialog.Builder(ArchivedActivity.this);
+            dialog.setTitle(R.string.dialog_remove_item);
+            dialog.setMessage("Delete or archive this item?");
+            final toDo itemToRemove = adapter.getItem(position);
+
+            dialog.setNegativeButton("Cancel", null);
+            if(itemToRemove.getArchived() == false) {
+            dialog.setNeutralButton("Archive", new AlertDialog.OnClickListener() {
 
 				@Override
-				public boolean onItemLongClick(AdapterView<?> parent,
-					View view, int position, long id) {
-					// Remove or archive item
-		            AlertDialog.Builder dialog = new AlertDialog.Builder(ArchivedActivity.this);
-		            dialog.setTitle(R.string.dialog_remove_item);
-		            dialog.setMessage("Delete or archive this item?");
-		            final toDo itemToRemove = adapter.getItem(position);
+				public void onClick(DialogInterface dialog, int which) {
+					itemToRemove.Archived = !itemToRemove.getArchived();
+					databaseAccess.modifyObject(App.getContext(), itemToRemove);
+					updateList();
+				}
+            
+            });
+            }
+            else {
+	            dialog.setNeutralButton("Unarchive", new AlertDialog.OnClickListener() {
 
-		            dialog.setNegativeButton("Cancel", null);
-		            if(itemToRemove.getArchived() == false) {
-		            dialog.setNeutralButton("Archive", new AlertDialog.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						itemToRemove.Archived = !itemToRemove.getArchived();
+						databaseAccess.modifyObject(App.getContext(), itemToRemove);
+						updateList();
+					}
+	            
+	            });
+            }
+            dialog.setPositiveButton("Delete", new AlertDialog.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {        
+                items.remove(itemToRemove);
+                databaseAccess.deleteObject(App.getContext(), itemToRemove);
+                adapter.notifyDataSetChanged(); 
+             }
+            });
+             dialog.show();  
+             return true;
+        }
+		
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							itemToRemove.Archived = !itemToRemove.getArchived();
-							databaseAccess.modifyObject(App.getContext(), itemToRemove);
-							updateList();
-						}
-		            
-		            });
-		            }
-		            else {
-			            dialog.setNeutralButton("Unarchive", new AlertDialog.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								itemToRemove.Archived = !itemToRemove.getArchived();
-								databaseAccess.modifyObject(App.getContext(), itemToRemove);
-								updateList();
-							}
-			            
-			            });
-		            }
-		            dialog.setPositiveButton("Delete", new AlertDialog.OnClickListener() {
-		            public void onClick(DialogInterface dialog, int which) {        
-		                items.remove(itemToRemove);
-		                databaseAccess.deleteObject(App.getContext(), itemToRemove);
-		                adapter.notifyDataSetChanged(); 
-		             }
-		            });
-		             dialog.show();  
-		             return true;
-		        }
-				
-
-			});
+	});
     }
 
 	@Override

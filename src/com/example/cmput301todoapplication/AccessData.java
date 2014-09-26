@@ -11,8 +11,13 @@ import android.content.SharedPreferences.Editor;
 
 import com.google.gson.Gson;
 
+//Data access class. Within this app, the data is stored in the SharedPreferences
+//area. This class gives access to these preferences, with a variety of methods 
+//for the items stored within. Each class wanting to make use of the preferences
+//should instantiate an instance of this class
 public class AccessData{
 
+	//get all toDo items
 	public ArrayList<toDo> getAllItems(Context context) {
 		final ArrayList<toDo> items = new ArrayList<toDo>();
 		SharedPreferences savedItems = context.getSharedPreferences("Items",Context.MODE_PRIVATE);
@@ -30,6 +35,8 @@ public class AccessData{
         }
 		return items;
 	}
+	
+	//get the textbody from every toDo item
 	public CharSequence[] allItemsText(Context context) {
         final ArrayList<String> items = new ArrayList<String>();
         SharedPreferences savedItems = context.getSharedPreferences("Items",Context.MODE_PRIVATE);
@@ -49,6 +56,7 @@ public class AccessData{
         return itemText;
 	}
 	
+	//store a toDo object in SharedPreferences
     public boolean saveObject(Context context, toDo item) {
     	
     	SharedPreferences preferences = context.getSharedPreferences("Items",0);
@@ -59,6 +67,8 @@ public class AccessData{
         prefsEditor.commit();
         return true;
     }
+    
+    //delete a toDo object
     public void deleteObject(Context context, toDo item) {
     	SharedPreferences preferences = context.getSharedPreferences("Items",0);
     	Editor prefsEditor = preferences.edit();
@@ -66,6 +76,7 @@ public class AccessData{
     	prefsEditor.commit();
     }
     
+    //replace a toDo object with a modified version of itself
     public void modifyObject(Context context, toDo item) {
     	SharedPreferences preferences = context.getSharedPreferences("Items",0);
     	Editor prefsEditor = preferences.edit();
@@ -76,6 +87,7 @@ public class AccessData{
         prefsEditor.commit();
     }
     
+    //Summary method: used to get count
     public ArrayList<toDo> getUnarchivedItems(Context context) {
     	ArrayList<toDo> unArchItems = new ArrayList<toDo>();
     	ArrayList<toDo> items = getAllItems(context);
@@ -87,6 +99,7 @@ public class AccessData{
     	return unArchItems;
     }
     
+  //Summary method: used to get count
     public ArrayList<toDo> getArchivedItems(Context context) {
     	ArrayList<toDo> archItems = new ArrayList<toDo>();
     	ArrayList<toDo> items = getAllItems(context);
@@ -98,6 +111,7 @@ public class AccessData{
     	return archItems;
     }
     
+  //Summary method: used to get count
     public ArrayList<toDo> getUnarchivedChecked(Context context) {
     	ArrayList<toDo> unArchItems = new ArrayList<toDo>();
     	ArrayList<toDo> items = getUnarchivedItems(context);
@@ -109,6 +123,7 @@ public class AccessData{
     	return unArchItems;
     }
     
+  //Summary method: used to get count
     public ArrayList<toDo> getArchivedChecked(Context context) {
     	ArrayList<toDo> archItems = new ArrayList<toDo>();
     	ArrayList<toDo> items = getArchivedItems(context);
