@@ -56,7 +56,7 @@ public class ItemArrayAdapter extends ArrayAdapter<toDo>{
     	     public void onClick(View v) {  
     	      CheckBox cb = (CheckBox) v ;  
     	      toDo item = (toDo) cb.getTag();
-    	      item.setSelected(!item.getChecked());
+    	      item.setChecked(!item.getChecked());
     	      databaseAccess.saveObject(App.getContext(), item);
     	     }  
     	    });  

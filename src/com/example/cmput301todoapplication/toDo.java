@@ -1,11 +1,5 @@
 package com.example.cmput301todoapplication;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import android.content.Context;
-import android.content.SharedPreferences;
 
 public class toDo {
 	
@@ -13,20 +7,14 @@ public class toDo {
 	public boolean Archived;
 	private String Text;
 	private boolean Checked;
-	private Date DateCreated;
 	
 	public toDo(int id, String infoText) {
 		Id = id;
 		Text = infoText;
 		Archived = false;
 		Checked = false;
-		DateCreated = new Date();
 	}
 	
-	public String getDateCreated() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		return dateFormat.format(this.DateCreated);
-	}
 	
 	public int getId() {
 		return Id;
@@ -43,19 +31,26 @@ public class toDo {
 		return Text;
 	}
 	
+	public void setArchived(boolean archived) {
+		Archived = archived;
+	}
+
+
+	public void setText(String text) {
+		Text = text;
+	}
+
+
+	public void setChecked(boolean checked) {
+		Checked = checked;
+	}
+
+
 	@Override
 	public String toString() {
 		return this.Text;
 		
 	}
 	
-	public void setSelected(boolean selected) {
-		this.Checked = selected;
-	}
-	
-	public boolean removeItem() {
-		
-		return false;
-		
-	}
+
 }
