@@ -1,7 +1,6 @@
 package com.example.cmput301todoapplication;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -11,23 +10,17 @@ import com.google.gson.Gson;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 
 
@@ -91,13 +84,15 @@ public class MainActivity extends Activity implements DialogFragmentListener{
     }
     
 
-    
+    // Code in this section was taken from 
+    // http://www.vogella.com/tutorials/AndroidListView/article.html
+    // which is licensed under the Eclipse Public License 1.0
+
     public void updateList()
     {
     	final ListView listView = (ListView) findViewById(R.id.itemListView);
         final ArrayList<toDo> items = new ArrayList<toDo>();
         SharedPreferences savedItems = getSharedPreferences("Items",Context.MODE_PRIVATE);
-        
         Gson gson = new Gson();
         Map<String,?> entries = savedItems.getAll();
         Set<String> keys = entries.keySet();
@@ -109,27 +104,41 @@ public class MainActivity extends Activity implements DialogFragmentListener{
             	items.add(item);
             }
         }
+        
         adapter = new ItemArrayAdapter(this,
                 	R.layout.todo_information, items);
             		listView.setAdapter(adapter);
 
-            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
-				@Override
-				public boolean onItemLongClick(AdapterView<?> parent,
-					View view, int position, long id) {
-					// Remove or archive item
-		            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-		            dialog.setTitle(R.string.dialog_remove_item);
-		            dialog.setMessage("Delete or archive this item?");
-		            final toDo itemToRemove = adapter.getItem(position);
-
-		            dialog.setNegativeButton("Cancel", null);
-		            
-		            if(itemToRemove.getArchived() == false) {
-		            	//set option to archive item
-		            dialog.setNeutralButton("Archive", new AlertDialog.OnClickListener() {
-
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent,
+				View view, int position, long id) {
+				// Remove or archive item
+	            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+	            dialog.setTitle(R.string.dialog_remove_item);
+	            dialog.setMessage("Delete or archive this item?");
+	            final toDo itemToRemove = adapter.getItem(position);
+	
+	            dialog.setNegativeButton("Cancel", null);
+	            
+	            if(itemToRemove.getArchived() == false) {
+	            	//set option to archive item
+	            dialog.setNeutralButton("Archive", new AlertDialog.OnClickListener() {
+	
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						itemToRemove.Archived = !itemToRemove.getArchived();
+						databaseAccess.modifyObject(App.getContext(), itemToRemove);
+						updateList();
+					}
+	            
+	            });
+	            }
+	            else {
+	            	//set option to unarchive item
+		            dialog.setNeutralButton("Unarchive", new AlertDialog.OnClickListener() {
+	
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							itemToRemove.Archived = !itemToRemove.getArchived();
@@ -138,33 +147,19 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 						}
 		            
 		            });
-		            }
-		            else {
-		            	//set option to unarchive item
-			            dialog.setNeutralButton("Unarchive", new AlertDialog.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								itemToRemove.Archived = !itemToRemove.getArchived();
-								databaseAccess.modifyObject(App.getContext(), itemToRemove);
-								updateList();
-							}
-			            
-			            });
-		            }
-		            dialog.setPositiveButton("Delete", new AlertDialog.OnClickListener() {
-		            public void onClick(DialogInterface dialog, int which) {        
-		                items.remove(itemToRemove);
-		                databaseAccess.deleteObject(App.getContext(),itemToRemove);
-		                adapter.notifyDataSetChanged(); 
-		             }
-		            });
-		             dialog.show();
-		             return true;
-		        }
-				
-
-			});
+	            }
+	            dialog.setPositiveButton("Delete", new AlertDialog.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int which) {        
+	                items.remove(itemToRemove);
+	                databaseAccess.deleteObject(App.getContext(),itemToRemove);
+	                adapter.notifyDataSetChanged(); 
+	             }
+            });
+            
+            dialog.show();
+            return true;
+        }
+	});
     }
 
 	@Override

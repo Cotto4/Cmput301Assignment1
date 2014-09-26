@@ -1,7 +1,5 @@
 package com.example.cmput301todoapplication;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,8 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.Filter;
 import android.widget.TextView;
+
+// Custom adapter to handle a complex item list view
+
+// Code was taken from
+// http://www.mysamplecode.com/2012/07/android-listview-checkbox-example.html
+// and reused for this project.
 
 public class ItemArrayAdapter extends ArrayAdapter<toDo>{
 

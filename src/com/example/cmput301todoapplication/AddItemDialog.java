@@ -9,7 +9,11 @@ import android.text.InputType;
 import android.widget.EditText;
 
 
-//Dialog to add a toDo item to the application
+// Dialog to add a toDo item to the application
+
+// This dialog was created using resources located at
+// http://developer.android.com/guide/topics/ui/dialogs.html
+// and licensed under the Creative Commons Attribution 2.5 license
 public class AddItemDialog extends DialogFragment {
 	
     public Dialog onCreateDialog(Bundle savedInstanceState) {

@@ -2,6 +2,7 @@ package com.example.cmput301todoapplication;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -11,11 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+// Display a summary of the app statistics
+
+// This dialog was created using resources located at
+// http://developer.android.com/guide/topics/ui/dialogs.html
+// and licensed under the Creative Commons Attribution 2.5 license
 public class SummaryDialog extends DialogFragment{
 
 	private AccessData databaseAccess;
 	
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
+	@SuppressLint("InflateParams") public Dialog onCreateDialog(Bundle savedInstanceState) {
 		databaseAccess = new AccessData();
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -32,7 +38,7 @@ public class SummaryDialog extends DialogFragment{
         builder.setTitle(R.string.summary)
         .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
-                	   	//Exit summary
+                	   	// Exit summary
                    }
                });
 

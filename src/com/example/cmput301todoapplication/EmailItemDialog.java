@@ -8,10 +8,11 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
-import android.widget.EditText;
 import android.widget.Toast;
 
+//This dialog was created using resources located at
+///http://developer.android.com/guide/topics/ui/dialogs.html
+//and licensed under the Creative Commons Attribution 2.5 license
 public class EmailItemDialog extends DialogFragment{
 
 	public AccessData databaseAccess;
@@ -64,6 +65,11 @@ public class EmailItemDialog extends DialogFragment{
         return builder.create();
     }
     
+    //Send an email using an installed email client within Android
+    
+    //The code below was partially taken from
+    //http://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application
+    //and is licensed under the Creative Commons Attribution Share Alike license.
     public void sendEmail(ArrayList<toDo> selectedItems) {
      	Intent i = new Intent(Intent.ACTION_SEND);
     	i.setType("message/rfc822");
