@@ -22,7 +22,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-
+// Main activity of the app, used to display a list
+// of the current items
 
 public class MainActivity extends Activity implements DialogFragmentListener{
 
@@ -68,17 +69,17 @@ public class MainActivity extends Activity implements DialogFragmentListener{
         return super.onOptionsItemSelected(item);
     }
     
-    public void addItemDialog(View view) {
+    private void addItemDialog(View view) {
     	DialogFragment dialog = new AddItemDialog();
     	dialog.show(getFragmentManager(), INPUT_SERVICE);
     }
 
-    public void emailDialog(View view) {
+    private void emailDialog(View view) {
     	DialogFragment dialog = new EmailItemDialog();
     	dialog.show(getFragmentManager(), INPUT_SERVICE);
     }
     
-    public void summaryDialog(View view) {
+    private void summaryDialog(View view) {
     	DialogFragment dialog = new SummaryDialog();
     	dialog.show(getFragmentManager(), INPUT_SERVICE);
     }
@@ -88,7 +89,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
     // http://www.vogella.com/tutorials/AndroidListView/article.html
     // which is licensed under the Eclipse Public License 1.0
 
-    public void updateList()
+    private void updateList()
     {
     	final ListView listView = (ListView) findViewById(R.id.itemListView);
         final ArrayList<toDo> items = new ArrayList<toDo>();
