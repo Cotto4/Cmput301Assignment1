@@ -46,19 +46,19 @@ public class SummaryDialog extends DialogFragment{
 		
 	}
 	
-	public void setAllItems(View v) {
+	private void setAllItems(View v) {
 		TextView allItems = (TextView) v.findViewById(R.id.todoitems);
 		ArrayList<toDo> items = databaseAccess.getUnarchivedItems(App.getContext());
 		allItems.setText("To Do Items: " + String.valueOf(items.size()));
 	}
 	
-	public void setAllCheckedItems(View v) {
+	private void setAllCheckedItems(View v) {
 		TextView allItems = (TextView) v.findViewById(R.id.todochecked);
 		ArrayList<toDo> items = databaseAccess.getUnarchivedChecked(App.getContext());
 		allItems.setText("Checked: " + String.valueOf(items.size()));
 	}
 	
-	public void setAllUncheckedItems(View v) {
+	private void setAllUncheckedItems(View v) {
 		TextView allItems = (TextView) v.findViewById(R.id.todounchecked);
 		ArrayList<toDo> items = databaseAccess.getUnarchivedChecked(App.getContext());
 		ArrayList<toDo> totalItems = databaseAccess.getUnarchivedItems(App.getContext());
@@ -66,19 +66,19 @@ public class SummaryDialog extends DialogFragment{
 		allItems.setText("Unchecked: " + num);
 	}
 	
-	public void setAllArchivedItems(View v) {
+	private void setAllArchivedItems(View v) {
 		TextView allItems = (TextView) v.findViewById(R.id.archiveitems);
 		ArrayList<toDo> items = databaseAccess.getArchivedItems(App.getContext());
 		allItems.setText("Archived: " + String.valueOf(items.size()));
 	}
 	
-	public void setAllArchivedChecked(View v) {
+	private void setAllArchivedChecked(View v) {
 		TextView allItems = (TextView) v.findViewById(R.id.archivedchecked);
 		ArrayList<toDo> items = databaseAccess.getArchivedChecked(App.getContext());
 		allItems.setText("Checked: " + String.valueOf(items.size()));
 	}
 	
-	public void setAllArchivedUnchecked(View v) {
+	private void setAllArchivedUnchecked(View v) {
 		TextView allItems = (TextView) v.findViewById(R.id.archivedunchecked);
 		ArrayList<toDo> items = databaseAccess.getArchivedChecked(App.getContext());
 		ArrayList<toDo> totalItems = databaseAccess.getArchivedItems(App.getContext());

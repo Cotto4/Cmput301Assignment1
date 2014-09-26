@@ -82,15 +82,22 @@ public class AccessData{
     }
     
     // delete a toDo object
-    public void deleteObject(Context context, toDo item) {
+    public boolean deleteObject(Context context, toDo item) {
+    	try {
     	SharedPreferences preferences = context.getSharedPreferences("Items",0);
     	Editor prefsEditor = preferences.edit();
     	prefsEditor.remove(Integer.toString(item.getId()));
     	prefsEditor.commit();
+    	return true;
+    	}
+    	catch (Exception e) {
+    		return false;
+    	}
     }
     
     // replace a toDo object with a modified version of itself
-    public void modifyObject(Context context, toDo item) {
+    public boolean modifyObject(Context context, toDo item) {
+    	try{
     	SharedPreferences preferences = context.getSharedPreferences("Items",0);
     	Editor prefsEditor = preferences.edit();
         Gson gson = new Gson();
@@ -99,6 +106,11 @@ public class AccessData{
         prefsEditor.remove(id);
         prefsEditor.putString(id, json);
         prefsEditor.commit();
+        return true;
+    	}
+    	catch (Exception e) {
+    		return false;
+    	}
     }
     
     // Summary method: used to get count
