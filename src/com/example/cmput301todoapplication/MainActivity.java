@@ -33,7 +33,6 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity implements DialogFragmentListener{
 
-	private int[] objectIds;
 	private ItemArrayAdapter adapter;
 	public AccessData databaseAccess;
 	
@@ -43,13 +42,6 @@ public class MainActivity extends Activity implements DialogFragmentListener{
         setContentView(R.layout.activity_main);
         App.setContext(this);
         databaseAccess = new AccessData();
-        
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
-        
         updateList();
     }
 
@@ -63,12 +55,10 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // Handle action bar item clicks
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.summary_button) {
+        	summaryDialog(this.findViewById(MODE_PRIVATE));
         }
         if (id == R.id.add_item_button) {
         	addItemDialog(this.findViewById(MODE_PRIVATE));
@@ -89,35 +79,18 @@ public class MainActivity extends Activity implements DialogFragmentListener{
     	DialogFragment dialog = new AddItemDialog();
     	dialog.show(getFragmentManager(), INPUT_SERVICE);
     }
-    
-    public void removeItemDialog(View view) {
-    	DialogFragment dialog = new RemoveItemDialog();
-    	dialog.show(getFragmentManager(), INPUT_SERVICE);
-    }
-    
+
     public void emailDialog(View view) {
     	DialogFragment dialog = new EmailItemDialog();
     	dialog.show(getFragmentManager(), INPUT_SERVICE);
     }
     
-    public boolean saveObject(toDo item) {
-    	
-    	SharedPreferences preferences = getSharedPreferences("Items",MODE_PRIVATE);
-    	Editor prefsEditor = preferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(item);
-        prefsEditor.putString(Integer.toString(item.getId()), json);
-        prefsEditor.commit();
-    	return true;
+    public void summaryDialog(View view) {
+    	DialogFragment dialog = new SummaryDialog();
+    	dialog.show(getFragmentManager(), INPUT_SERVICE);
     }
     
-    public boolean deleteObject(toDo item) {
-    	SharedPreferences preferences = getSharedPreferences("Items",MODE_PRIVATE);
-    	Editor prefsEditor = preferences.edit();
-    	prefsEditor.remove(Integer.toString(item.getId()));
-    	prefsEditor.commit();
-		return false;
-    }
+
     
     public void updateList()
     {
@@ -130,22 +103,15 @@ public class MainActivity extends Activity implements DialogFragmentListener{
         Set<String> keys = entries.keySet();
         
         for (String key : keys) {
-        	if (key.equals(R.string.object_id_key)) {
-        		String json = savedItems.getString(key, "");
-                int[] ids = gson.fromJson(json, int[].class);
-        		this.objectIds = ids;
-        	}
-        	else {
-	            String json = savedItems.getString(key, "");
-	            toDo item = gson.fromJson(json, toDo.class);
-	            if (item != null && item.getArchived() == false) {
-	            	items.add(item);
-	            }
-        	}
+            String json = savedItems.getString(key, "");
+            toDo item = gson.fromJson(json, toDo.class);
+            if (item != null && item.getArchived() == false) {
+            	items.add(item);
+            }
         }
         adapter = new ItemArrayAdapter(this,
-                R.layout.todo_information, items);
-            listView.setAdapter(adapter);
+                	R.layout.todo_information, items);
+            		listView.setAdapter(adapter);
 
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
@@ -159,7 +125,9 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 		            final toDo itemToRemove = adapter.getItem(position);
 
 		            dialog.setNegativeButton("Cancel", null);
+		            
 		            if(itemToRemove.getArchived() == false) {
+		            	//set option to archive item
 		            dialog.setNeutralButton("Archive", new AlertDialog.OnClickListener() {
 
 						@Override
@@ -172,6 +140,7 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 		            });
 		            }
 		            else {
+		            	//set option to unarchive item
 			            dialog.setNeutralButton("Unarchive", new AlertDialog.OnClickListener() {
 
 							@Override
@@ -186,13 +155,11 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 		            dialog.setPositiveButton("Delete", new AlertDialog.OnClickListener() {
 		            public void onClick(DialogInterface dialog, int which) {        
 		                items.remove(itemToRemove);
-		                deleteObject(itemToRemove);
+		                databaseAccess.deleteObject(App.getContext(),itemToRemove);
 		                adapter.notifyDataSetChanged(); 
 		             }
 		            });
 		             dialog.show();
-		             // Return true to consume the click event. In this case the
-		             // onListItemClick listener is not called anymore.  
 		             return true;
 		        }
 				
@@ -200,49 +167,18 @@ public class MainActivity extends Activity implements DialogFragmentListener{
 			});
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-    }
-
 	@Override
 	public void onReturnValue(String text) {
-		SharedPreferences preferences = getSharedPreferences("Items",Context.MODE_PRIVATE);
-		Editor prefsEditor = preferences.edit();
-		Gson gson = new Gson();
-		String json = gson.toJson(objectIds);
-        prefsEditor.putString(Integer.toString(R.string.object_id_key), json);
-        prefsEditor.commit();
         Random rand = new Random();
-        int id = rand.nextInt(100000);
-        //TODO check for id collisions
-        while (Arrays.asList(objectIds).contains(id)) {
-        	id = rand.nextInt(100000);
-        }
-      //objectIds[objectIds.length] = id;
+        //assign random ID to item
+        int id = rand.nextInt(10000000);
 		toDo item = new toDo(id, text);
-		
-		if (saveObject(item)) {
-			//refresh fragment to show changes
+		if (databaseAccess.saveObject(App.getContext(),item)) {
+			//refresh list to show changes
 			updateList();
 			final ListView listView = (ListView) findViewById(R.id.itemListView);
 			((BaseAdapter) listView.getAdapter()).notifyDataSetChanged(); 
-			//finish();
-			//startActivity(getIntent());
-		}
-		
-		
+		}	
 	}
 }
 

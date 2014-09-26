@@ -22,15 +22,11 @@ public class AccessData{
         Set<String> keys = entries.keySet();
         
         for (String key : keys) {
-        	if (key.equals(R.string.object_id_key)) {
-        	}
-        	else {
-	            String json = savedItems.getString(key, "");
-	            toDo item = gson.fromJson(json, toDo.class);
-	            if (item != null) {
-	            	items.add(item);
-	            }
-        	}
+            String json = savedItems.getString(key, "");
+            toDo item = gson.fromJson(json, toDo.class);
+            if (item != null) {
+            	items.add(item);
+            }
         }
 		return items;
 	}
@@ -43,21 +39,17 @@ public class AccessData{
         Set<String> keys = entries.keySet();
         
         for (String key : keys) {
-        	if (key.equals(R.string.object_id_key)) {
-        	}
-        	else {
-	            String json = savedItems.getString(key, "");
-	            toDo item = gson.fromJson(json, toDo.class);
-	            if (item != null) {
-	            	items.add(item.getText());
-	            }
-        	}
+            String json = savedItems.getString(key, "");
+            toDo item = gson.fromJson(json, toDo.class);
+            if (item != null) {
+            	items.add(item.getText());
+            }
         }
         final CharSequence[] itemText = items.toArray(new CharSequence[items.size()]);
         return itemText;
 	}
 	
-    public void saveObject(Context context, toDo item) {
+    public boolean saveObject(Context context, toDo item) {
     	
     	SharedPreferences preferences = context.getSharedPreferences("Items",0);
     	Editor prefsEditor = preferences.edit();
@@ -65,6 +57,7 @@ public class AccessData{
         String json = gson.toJson(item);
         prefsEditor.putString(Integer.toString(item.getId()), json);
         prefsEditor.commit();
+        return true;
     }
     public void deleteObject(Context context, toDo item) {
     	SharedPreferences preferences = context.getSharedPreferences("Items",0);
@@ -81,5 +74,49 @@ public class AccessData{
         prefsEditor.remove(Integer.toString(item.getId()));
         prefsEditor.putString(Integer.toString(item.getId()), json);
         prefsEditor.commit();
+    }
+    
+    public ArrayList<toDo> getUnarchivedItems(Context context) {
+    	ArrayList<toDo> unArchItems = new ArrayList<toDo>();
+    	ArrayList<toDo> items = getAllItems(context);
+    	for (toDo item : items) {
+    		if (item.Archived == false) {
+    			unArchItems.add(item);
+    		}
+    	}
+    	return unArchItems;
+    }
+    
+    public ArrayList<toDo> getArchivedItems(Context context) {
+    	ArrayList<toDo> archItems = new ArrayList<toDo>();
+    	ArrayList<toDo> items = getAllItems(context);
+    	for (toDo item : items) {
+    		if (item.Archived == true) {
+    			archItems.add(item);
+    		}
+    	}
+    	return archItems;
+    }
+    
+    public ArrayList<toDo> getUnarchivedChecked(Context context) {
+    	ArrayList<toDo> unArchItems = new ArrayList<toDo>();
+    	ArrayList<toDo> items = getUnarchivedItems(context);
+    	for (toDo item : items) {
+    		if (item.getChecked() == true) {
+    			unArchItems.add(item);
+    		}
+    	}
+    	return unArchItems;
+    }
+    
+    public ArrayList<toDo> getArchivedChecked(Context context) {
+    	ArrayList<toDo> archItems = new ArrayList<toDo>();
+    	ArrayList<toDo> items = getArchivedItems(context);
+    	for (toDo item : items) {
+    		if (item.getChecked() == true) {
+    			archItems.add(item);
+    		}
+    	}
+    	return archItems;
     }
 }

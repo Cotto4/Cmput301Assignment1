@@ -24,10 +24,6 @@ public class EmailItemDialog extends DialogFragment{
     	selectedItemsIndex = new ArrayList<Integer>();
     	allItems = databaseAccess.getAllItems(getActivity().getBaseContext());
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        EditText input = new EditText(App.getContext());
-        input.setId(0);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
         builder.setTitle(R.string.dialog_email_items)
                    .setMultiChoiceItems(databaseAccess.allItemsText(App.getContext()), null,
                       new DialogInterface.OnMultiChoiceClickListener() {
@@ -45,24 +41,19 @@ public class EmailItemDialog extends DialogFragment{
            })
                .setPositiveButton(R.string.dialog_email, new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
-                       // TODO Email items
+                	   // Email items
                 	   final ArrayList<toDo> selectedItems = new ArrayList<toDo>();
                 	   for(Integer i : selectedItemsIndex) {
                 		   selectedItems.add(allItems.get(i));
                 	   }
-                   	Intent i = new Intent(Intent.ACTION_SEND);
-                	i.setType("message/rfc822");
-                	String emailText = "";
-                	for (toDo item : selectedItems){
-                		emailText = emailText + "\n" + item.getText();
-                	}
-                	i.putExtra(Intent.EXTRA_TEXT   , emailText);
-                	try {
-                	    startActivity(Intent.createChooser(i, "Send mail..."));
-                	} catch (android.content.ActivityNotFoundException ex) {
-                	    Toast.makeText(getActivity().getApplicationContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                	}
+                	   sendEmail(selectedItems);
                    }
+               })
+               .setNeutralButton(R.string.email_all, new DialogInterface.OnClickListener() {
+            	   public void onClick(DialogInterface dialog, int id) {
+            		   //Email all items
+            		   sendEmail(allItems);
+            	   }
                })
                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
@@ -71,6 +62,25 @@ public class EmailItemDialog extends DialogFragment{
                });
         // Create the AlertDialog object and return it
         return builder.create();
+    }
+    
+    public void sendEmail(ArrayList<toDo> selectedItems) {
+     	Intent i = new Intent(Intent.ACTION_SEND);
+    	i.setType("message/rfc822");
+    	String emailText = "";
+    	for (toDo item : selectedItems){
+    		String checked = "[]";
+    		if (item.getChecked() == true) {
+    			checked = "[X]";
+    		}
+    		emailText = emailText + "\n" + checked + " " + item.getText();
+    	}
+    	i.putExtra(Intent.EXTRA_TEXT   , emailText);
+    	try {
+    	    startActivity(Intent.createChooser(i, "Send mail..."));
+    	} catch (android.content.ActivityNotFoundException ex) {
+    	    Toast.makeText(getActivity().getApplicationContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+    	}
     }
 	
 }
